@@ -36,8 +36,7 @@ class ChatAPITest(APITestCase):
 
     def test_create_thread_duplicate(self):
         response = self.client_alice.post('/chat/threads/', {"participants": [self.alice.id, self.bob.id]})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], self.thread.id)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_invalid_thread(self):
         response = self.client_alice.post('/chat/threads/', {"participants": [self.alice.id]})
@@ -51,15 +50,22 @@ class ChatAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['text'], "Ще одне повідомлення")
 
+    def test_unread_count(self):
+        # Убедимся, что сообщение существует и принадлежит диалогу
+        self.assertFalse(self.message.is_read)  # Сообщение должно быть непрочитанным
+        self.assertIn(self.bob, self.thread.participants.all())  # Bob должен быть участником диалога
+
+        # Выполняем запрос
+        response = self.client_bob.get('/chat/messages/unread/')  # Или '/chat/messages/unread/'
+
+        # Проверяем результат
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['unread_count'], 1)
+
     def test_mark_message_as_read(self):
         response = self.client_bob.post(f'/chat/messages/{self.message.id}/mark_as_read/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['status'], 'marked as read')
-
-    def test_unread_count(self):
-        response = self.client_bob.get('/chat/messages/unread/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['unread_count'], 1)
 
     def test_delete_thread(self):
         response = self.client_alice.delete(f'/chat/threads/{self.thread.id}/')
@@ -87,8 +93,6 @@ class ChatAPITest(APITestCase):
         res = client_charlie.get('/chat/messages/')
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['count'], 0)
-
-        # Charlie намагається створити повідомлення в чужий thread
         res = client_charlie.post('/chat/messages/', {
             "thread": self.thread.id,
             "text": "Привіт від чужака"

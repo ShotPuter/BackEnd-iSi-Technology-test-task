@@ -8,5 +8,5 @@ router.register(r'messages', MessageViewSet, basename='message')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('messages/unread/', UnreadCountView.as_view()),
+    path('messages/unread/', UnreadCountView.as_view(), name='unread-count'),
 ]

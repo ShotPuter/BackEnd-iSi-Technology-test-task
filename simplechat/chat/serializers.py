@@ -23,3 +23,17 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ['id', 'thread', 'sender', 'text', 'created', 'is_read']
+
+    def validate_thread(self, value):
+        """Ensure the current user is a participant in the thread"""
+        request = self.context.get('request')
+        if request and request.user:
+            if not value.participants.filter(id=request.user.id).exists():
+                raise serializers.ValidationError("You are not a participant in this thread.")
+        return value
+
+    def validate_text(self, value):
+        """Ensure text is not empty"""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Text field is required and cannot be empty.")
+        return value
