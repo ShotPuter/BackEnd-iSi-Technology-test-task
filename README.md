@@ -33,17 +33,19 @@ pip install -r requirements.txt
 
 4. Apply migrations:
 ```bash
+cd simplechat
+python manage.py makemigrations chat
 python manage.py migrate
 ```
 
 5. Load initial data:
 ```bash
-python manage.py loaddata fixtures/all_data.json
+python simplechat/manage.py loaddata fixtures/all_data.json
 ```
 
 6. Run the development server:
 ```bash
-python manage.py runserver
+python simplechat/manage.py runserver
 ```
 
 ## API Endpoints
@@ -90,12 +92,12 @@ All 13 tests are now passing successfully:
 ## Running Tests
 To run the test suite:
 ```bash
-python manage.py test
+python simplechat/manage.py test chat
 ```
 
 For API integration testing:
 ```bash
-python tests/test_chat_api.py
+python simplechat/utils/test_chat_api.py
 ```
 
 ## Project Structure
