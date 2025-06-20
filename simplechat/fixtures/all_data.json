@@ -1,0 +1,58 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "alice",
+      "password": "pbkdf2_sha256$600000$508nVxQb5PtedEtNa2BXqT$50vEoxwTdla1sUMqpH2QLPpYQfkRXjzO8zrPAdDt6Uk=",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "bob",
+      "password": "pbkdf2_sha256$600000$skVUwl0lKNhYqaeUO5Y6a3$yxRMDmSdmOZ2y/y8jsM9Nb8UD40aXgDUq7f2XYAtXhA=",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_active": true
+    }
+  },
+  {
+    "model": "chat.thread",
+    "pk": 1,
+    "fields": {
+      "participants": [
+        1,
+        2
+      ],
+      "created": "2025-06-01T12:00:00Z",
+      "updated": "2025-06-01T12:00:00Z"
+    }
+  },
+  {
+    "model": "chat.message",
+    "pk": 1,
+    "fields": {
+      "thread": 1,
+      "sender": 1,
+      "text": "\u041f\u0440\u0438\u0432\u0456\u0442, \u044f\u043a \u0441\u043f\u0440\u0430\u0432\u0438?",
+      "created": "2025-06-01T12:01:00Z",
+      "is_read": false
+    }
+  },
+  {
+    "model": "chat.message",
+    "pk": 2,
+    "fields": {
+      "thread": 1,
+      "sender": 2,
+      "text": "\u0412\u0441\u0435 \u0434\u043e\u0431\u0440\u0435, \u0434\u044f\u043a\u0443\u044e! \u0410 \u0432 \u0442\u0435\u0431\u0435?",
+      "created": "2025-06-01T12:02:00Z",
+      "is_read": false
+    }
+  }
+]
